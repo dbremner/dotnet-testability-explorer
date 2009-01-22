@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AD97F01A-0732-4FC2-8D5B-D822420938AF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Thinklouder.Testability.Tests</RootNamespace>
+    <AssemblyName>Testability.Explorer.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\c5\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\nunit\bin\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="IL\ArraySample.cs" />
+    <Compile Include="IL\CastSample.cs" />
+    <Compile Include="IL\FieldSample.cs" />
+    <Compile Include="IL\LdcNullSample.cs" />
+    <Compile Include="IL\NewArraySample.cs" />
+    <Compile Include="IL\OpIncrementSample.cs" />
+    <Compile Include="IL\PushStackSample.cs" />
+    <Compile Include="IL\StaticFieldSample.cs" />
+    <Compile Include="IL\SwitchSample.cs" />
+    <Compile Include="Metrics\Asm\MethodVisitorTest.cs" />
+    <Compile Include="Metrics\AutoFieldClearTestCase.cs" />
+    <Compile Include="Metrics\ClassCostTest.cs" />
+    <Compile Include="Metrics\ClassInfoTest.cs" />
+    <Compile Include="Metrics\ClrTypeTest.cs" />
+    <Compile Include="Metrics\CostUtil.cs" />
+    <Compile Include="Metrics\CostUtilTest.cs" />
+    <Compile Include="Metrics\Method\BlockDecomposerTest.cs" />
+    <Compile Include="Metrics\Method\BlockTest.cs" />
+    <Compile Include="Metrics\Method\Collection\KeyedMultiStackTest.cs" />
+    <Compile Include="Metrics\CostTest.cs" />
+    <Compile Include="Metrics\CyclomaticComplexityTest.cs" />
+    <Compile Include="Metrics\MethodInfoTest.cs" />
+    <Compile Include="Metrics\Method\MethodBlockTest.cs" />
+    <Compile Include="Metrics\Method\MethodCostTest.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\StackOperationsTest.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\SwapTest.cs" />
+    <Compile Include="Metrics\Method\Stack2TuringTest.cs" />
+    <Compile Include="Metrics\MetricComputerClrDecorator.cs" />
+    <Compile Include="Metrics\TestabilityVisitorTest.cs" />
+    <Compile Include="Metrics\VariableStateTest.cs" />
+    <Compile Include="Metrics\VariableTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\thirdparty\mono-cecil\svn\lib\Mono.Cecil.csproj">
+      <Project>{D8F63DFF-5230-43E4-9AB2-DA6E721A1FAE}</Project>
+      <Name>Mono.Cecil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Testability.Explorer\Testability.Explorer.csproj">
+      <Project>{164C80E0-AFD5-49DC-807F-62D8A9F5BE37}</Project>
+      <Name>Testability.Explorer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
