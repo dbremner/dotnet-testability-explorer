@@ -1,4 +1,4 @@
-For developers, how to build the project
+#summary For developers, how to build the project
 
 Environment requirement:
  # VS2008
