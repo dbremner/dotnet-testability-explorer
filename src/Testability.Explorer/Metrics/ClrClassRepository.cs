@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using C5;
 using Mono.Cecil;
@@ -34,9 +35,15 @@ namespace Thinklouder.Testability.Metrics
             {
                 // IsolatedAppDomainHost: D:
 
-                var friendlyName = AppDomain.CurrentDomain.FriendlyName;
-                var start = friendlyName.IndexOf(": ");
-                var path = friendlyName.Substring(start + 2, friendlyName.Length - start - 2);
+
+                //var friendlyName = AppDomain.CurrentDomain.FriendlyName;
+                //var start = friendlyName.IndexOf(": ");
+                //var path = friendlyName.Substring(start + 2, friendlyName.Length - start - 2);
+                //assemblyPath = path;
+
+                var scopeName = Assembly.GetCallingAssembly().ManifestModule.ScopeName;
+                var codeBase = Assembly.GetCallingAssembly().CodeBase;
+                var path = codeBase.Substring(8);
                 assemblyPath = path;
             }
 
