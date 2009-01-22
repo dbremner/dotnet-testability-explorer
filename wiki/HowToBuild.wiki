@@ -1,14 +1,14 @@
-#For developers, how to build the project
+ #For developers, how to build the project
 
 Environment requirement:
-# VS2008
-# Subversion
+ # VS2008
+ # Subversion
 
 Steps:
-# Checkout code
-# Open \src\Testability.Explorer.sln 
-# Build
-# Run unit tests
+ # Checkout code
+ # Open \src\Testability.Explorer.sln 
+ # Build
+ # Run unit tests
 
 All dependency like C5, NUnit, Cecil are referenced using relative path, so there is no need to configured by default. Have fun!
 
