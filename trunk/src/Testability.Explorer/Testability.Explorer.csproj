@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{164C80E0-AFD5-49DC-807F-62D8A9F5BE37}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Thinklouder.Testability</RootNamespace>
+    <AssemblyName>Testability.Explorer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\c5\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Metrics\ClassInfo.cs" />
+    <Compile Include="Metrics\IClassRepository.cs" />
+    <Compile Include="Metrics\MethodInfo.cs" />
+    <Compile Include="Metrics\Variable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Metrics\Asm\ClassInfoVisitor.cs" />
+    <Compile Include="Metrics\Asm\Instructions\CallRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\ConvertRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\ExceptionHandlerBlockRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\GetFieldRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\LabelRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\LoadConstantRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\NewArrayRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\NewRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\ReturnRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\SetFieldRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\StoreRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\SwitchRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\TryCatchRunnable.cs" />
+    <Compile Include="Metrics\ClrType.cs" />
+    <Compile Include="Metrics\Asm\FieldVisitor.cs" />
+    <Compile Include="Metrics\Asm\MethodVisitor.cs" />
+    <Compile Include="Metrics\Asm\ModuleInfoVisitor.cs" />
+    <Compile Include="Metrics\Asm\NoopVisitor.cs" />
+    <Compile Include="Metrics\Asm\VisibilityUtil.cs" />
+    <Compile Include="Metrics\ClassNotFoundException.cs" />
+    <Compile Include="Metrics\ClrClassRepository.cs" />
+    <Compile Include="Metrics\Cost.cs" />
+    <Compile Include="Metrics\CyclomaticCost.cs" />
+    <Compile Include="Metrics\FieldInfo.cs" />
+    <Compile Include="Metrics\FieldNotFoundException.cs" />
+    <Compile Include="Metrics\GlobalCost.cs" />
+    <Compile Include="Metrics\LoadAssemblyException.cs" />
+    <Compile Include="Metrics\LocalField.cs" />
+    <Compile Include="Metrics\LocalVariableInfo.cs" />
+    <Compile Include="Metrics\LocalVariableState.cs" />
+    <Compile Include="Metrics\LoDViolation.cs" />
+    <Compile Include="Metrics\MethodCost.cs" />
+    <Compile Include="Metrics\MethodInvokationCost.cs" />
+    <Compile Include="Metrics\MethodNotFoundException.cs" />
+    <Compile Include="Metrics\Method\Block.cs" />
+    <Compile Include="Metrics\Method\BlockDecomposer.cs" />
+    <Compile Include="Metrics\Method\Collection\KeyedMultiStack.cs" />
+    <Compile Include="Metrics\Method\Collection\PopClosure.cs" />
+    <Compile Include="Metrics\Method\Constant.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\ArrayLoad.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\ArrayStore.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Convert.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\GetField.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Invoke.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\JMP.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Label.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Load.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\MonitorEnter.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\MonitorExit.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Pop.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\PutField.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\RetSub.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Return.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\StackOperation.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Store.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Swap.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Throw.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Transform.cs" />
+    <Compile Include="Metrics\Method\Op\Turing\ArrayAssignment.cs" />
+    <Compile Include="Metrics\Method\Op\Turing\FieldAssignment.cs" />
+    <Compile Include="Metrics\Method\Op\Turing\LocalAssignment.cs" />
+    <Compile Include="Metrics\Method\Op\Turing\MethodInvokation.cs" />
+    <Compile Include="Metrics\Asm\IRunnable.cs" />
+    <Compile Include="Metrics\Method\Op\Turing\ReturnOperation.cs" />
+    <Compile Include="Metrics\Method\Stack2Turing.cs" />
+    <Compile Include="Metrics\MetricComputer.cs" />
+    <Compile Include="Metrics\MetricComputerBuilder.cs" />
+    <Compile Include="Metrics\Method\Op\Turing\Operation.cs" />
+    <Compile Include="Metrics\ParameterInfo.cs" />
+    <Compile Include="Metrics\TestabilityVisitor.cs" />
+    <Compile Include="Metrics\Type.cs" />
+    <Compile Include="Metrics\VariableState.cs" />
+    <Compile Include="Metrics\ViolationCost.cs" />
+    <Compile Include="Metrics\Visibility.cs" />
+    <Compile Include="Metrics\WhiteList.cs" />
+    <Compile Include="TestabilityExplorer.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\thirdparty\mono-cecil\svn\lib\Mono.Cecil.csproj">
+      <Project>{D8F63DFF-5230-43E4-9AB2-DA6E721A1FAE}</Project>
+      <Name>Mono.Cecil</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
