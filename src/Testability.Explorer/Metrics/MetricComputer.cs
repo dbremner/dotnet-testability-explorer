@@ -115,7 +115,7 @@ namespace Thinklouder.Testability.Metrics
             {
                 return;
             }
-            foreach (MethodInfo method in baseMethod.ClassInfo.GetMethods())
+            foreach (var method in baseMethod.ClassInfo.GetMethods())
             {
                 //if (method.Name.StartsWith("<clinit>"))
                 if (method.Name.StartsWith(".cctor"))

@@ -56,8 +56,8 @@ namespace Thinklouder.Testability.Metrics
 
         public static bool IsDoubleSlot(Type type)
         {
-            return false;
-            //return type == Double || type == Int64;  // TODO, if UInt64 double slot? by sunlw
+            //return false;
+            return type == Double || type == Int64;  // TODO, if UInt64 double slot? by sunlw
         }
 
         // TODO, do we meed more info for the Type model
@@ -83,6 +83,11 @@ namespace Thinklouder.Testability.Metrics
         public static Type FromClr(System.Type type)
         {
             return FromDescriptor(type.FullName);
+        }
+
+        public static Type FromClr<T>()
+        {
+            return FromDescriptor(typeof(T).FullName);
         }
 
         public static Type FromDescriptor(string descriptor)

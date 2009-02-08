@@ -46,10 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\c5\C5.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil, Version=0.6.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\mono.cecil\Mono.Cecil.dll</HintPath>
@@ -118,6 +114,7 @@
     <Compile Include="Metrics\Method\Op\Stack\ArrayLoad.cs" />
     <Compile Include="Metrics\Method\Op\Stack\ArrayStore.cs" />
     <Compile Include="Metrics\Method\Op\Stack\Convert.cs" />
+    <Compile Include="Metrics\Method\Op\Stack\Duplicate.cs" />
     <Compile Include="Metrics\Method\Op\Stack\GetField.cs" />
     <Compile Include="Metrics\Method\Op\Stack\Invoke.cs" />
     <Compile Include="Metrics\Method\Op\Stack\JMP.cs" />
@@ -175,6 +172,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\thirdparty\c5\C5\C5.csproj">
+      <Project>{D70489CD-ABDA-48FF-BD1E-BE3F7495BE71}</Project>
+      <Name>C5</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
