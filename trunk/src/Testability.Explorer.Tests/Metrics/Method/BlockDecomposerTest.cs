@@ -13,7 +13,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
     [TestFixture]
     public class BlockDecomposerTest
     {
-        [Test]public void testSimpleLinearMethod()
+        [Test]
+        public void testSimpleLinearMethod()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Return ret = new Return(0, ClrType.Void);
@@ -24,7 +25,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             Assert.AreEqual(list(ret), block.getOperations());
         }
 
-        [Test]public void testUnconditionalBackwardGoto()
+        [Test]
+        public void testUnconditionalBackwardGoto()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label label = new Label();
@@ -45,7 +47,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
         }
 
 
-        [Test]public void testUnconditionalForwardGoto()
+        [Test]
+        public void testUnconditionalForwardGoto()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label label = new Label();
@@ -66,7 +69,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
         }
 
 
-        [Test]public void testConditionalBackwardGoto()
+        [Test]
+        public void testConditionalBackwardGoto()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label label = new Label();
@@ -89,7 +93,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
         }
 
 
-        [Test]public void testConditionalForwardGoto()
+        [Test]
+        public void testConditionalForwardGoto()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label label = new Label();
@@ -118,7 +123,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             return Arrays.asList(items);
         }
 
-        [Test]public void testIgnoreExtraLabels()
+        [Test]
+        public void testIgnoreExtraLabels()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Load l1 = load(1);
@@ -142,7 +148,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
          * load 3
          * return;
          */
-        [Test]public void testJMP()
+        [Test]
+        public void testJMP()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             decomposer.addOp(load(1));
@@ -170,7 +177,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             return new Load(0, new Constant(value, ClrType.Int32));
         }
 
-        [Test]public void testSwitch()
+        [Test]
+        public void testSwitch()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Load l1 = load(1);
@@ -195,7 +203,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             Assert.AreEqual(list(c1Block, defBlock), main.getNextBlocks());
         }
 
-        [Test]public void testTryCatchReturn()
+        [Test]
+        public void testTryCatchReturn()
         {
             /*
              * try {        | label:lTry
@@ -231,7 +240,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
                 handleBlock.getOperations().ToString());
         }
 
-        [Test]public void testGetExceptionHandlerBlocks()
+        [Test]
+        public void testGetExceptionHandlerBlocks()
         {
             /*
              * try {        | label:lTry
@@ -326,7 +336,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
          *     2     4     7   Class java/lang/RuntimeException
          *     2    10    15   any
          */
-        [Test]public void testTryCatchFinally()
+        [Test]
+        public void testTryCatchFinally()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label tryStart = new Label();
@@ -398,7 +409,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
                 decomposer.getBlock(tryStart).getOperations().ToString());
         }
 
-        [Test]public void testMethodWithNothing()
+        [Test]
+        public void testMethodWithNothing()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             decomposer.decomposeIntoBlocks();
@@ -406,7 +418,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             Assert.AreEqual(0, operations.Count);
         }
 
-        [Test]public void testTwoJsrSameLabel()
+        [Test]
+        public void testTwoJsrSameLabel()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label label = new Label();
@@ -418,7 +431,8 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             Assert.AreEqual("[ 0:JMP sub_0, 1:JMP sub_0 ]", main.getOperations().ToString());
         }
 
-        [Test]public void testMultipleHandlersSingleExceptionLoad()
+        [Test]
+        public void testMultipleHandlersSingleExceptionLoad()
         {
             BlockDecomposer decomposer = new BlockDecomposer();
             Label start = new Label();
@@ -464,22 +478,82 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             }
         }
 
-        [Test]public void testExperiment()
+        [Test]
+        public void testExperiment()
         {
-            ClrClassRepository repo = new ClrClassRepository();
+            var repo = new ClrClassRepository();
             repo.GetClass(ClassInfo.GetFullName<TestClass>());
         }
 
-        [Test]
-        public void testClassinfoCtor()
+
+        public class TestPutField
         {
-            BlockDecomposer block = new BlockDecomposer();
-            block.addOp(new Load(1, new Constant(null, ClrType.FromDescriptor("Thinklouder.Testability.Metrics.ClrClassRepository"))));
-            block.addOp(new PutField(2, new FieldInfo(null, "repo", ClrType.FromDescriptor("Thinklouder.Testability.Metrics.ClrClassRepository"), false, false, false)));
-            block.addOp(new Invoke(3, "System.Object", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
-            block.addOp(new RetSub(4));
-            block.decomposeIntoBlocks();
-            block.getOperations();
+            ClrClassRepository repo;
+            public TestPutField()
+            {
+                repo = new ClrClassRepository();
+            }
+        }
+
+        [Test]
+        public void testInit()
+        {
+            ClrClassRepository repo = new ClrClassRepository();
+            ClassInfo clazz = repo.GetClass(ClassInfo.GetFullName<TestPutField>());
+            ICollectionValue<MethodInfo> methods = clazz.GetMethods();
+            foreach (MethodInfo method in methods)
+            {
+                IList<Operation> ops = method.Operations;
+                IList<Operation> ops1 = ops;
+            }
+
+            //MethodInfo method = clazz.getMethod("<init>V");
+            //List<Operation> ops = method.getOperations();
+        }
+
+        [Test]
+        public void testClassInfoCtor()
+        {
+            /*
+        decomposer.addOp(new Load(0, new LocalVariableInfo("this", JavaType.fromClass(BlockDecomposerTest.TestPutField.class))));
+        decomposer.addOp(new Load(1, new ParameterInfo("param_1", JavaType.fromClass(BlockDecomposerTest.class))));
+        decomposer.addOp(new PutField(2, new FieldInfo(null, "this$0", JavaType.fromClass(BlockDecomposerTest.TestPutField.class), false, false, false)));
+        decomposer.addOp(new Load(3, new LocalVariableInfo("this", JavaType.fromClass(BlockDecomposerTest.TestPutField.class))));
+        decomposer.addOp(new Invoke(4, "java.lang.Object", "<init>", "()V", new ArrayList<Type>(), false, JavaType.VOID));
+        decomposer.addOp(new Load(5, new LocalVariableInfo("this", JavaType.fromClass(BlockDecomposerTest.TestPutField.class))));
+        decomposer.addOp(new Load(6, new Constant("new", JavaType.fromClass(com.google.test.metric.JavaClassRepository.class))));
+        decomposer.addOp(new Duplicate(448, 0));
+        decomposer.addOp(new Invoke(8, "com.google.test.metric.JavaClassRepository", "<init>", "()V", new ArrayList<Type>(), false, JavaType.VOID));
+        decomposer.addOp(new PutField(9, new FieldInfo(null, "repo", JavaType.fromClass(BlockDecomposerTest.TestPutField.class), false, false, false)));
+        decomposer.addOp(new Return(449, JavaType.VOID));
+
+             */
+
+
+            BlockDecomposer decomposer = new BlockDecomposer();
+
+
+            //block.addOp(new Load(1, new Constant(null, ClrType.FromDescriptor("Thinklouder.Testability.Metrics.ClrClassRepository"))));
+            ////block.addOp(new PutField(2, new FieldInfo(null, "repo", ClrType.FromDescriptor("Thinklouder.Testability.Metrics.ClrClassRepository"), false, false, false)));
+            //block.addOp(new Invoke(3, "System.Object", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
+            //block.addOp(new RetSub(4));
+
+            decomposer.addOp(new Load(0, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
+            decomposer.addOp(new Load(1, new ParameterInfo("param_1", ClrType.FromClr<BlockDecomposerTest>())));
+            decomposer.addOp(new PutField(2, new FieldInfo(null, "this$0", ClrType.FromClr<BlockDecomposerTest.TestPutField>(), false, false, false)));
+            decomposer.addOp(new Load(3, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
+            decomposer.addOp(new Invoke(4, "System.Object", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
+            decomposer.addOp(new Load(5, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
+            decomposer.addOp(new Load(6, new Constant("new", ClrType.FromClr<ClrClassRepository>())));
+            decomposer.addOp(new Duplicate(7, 0));
+            decomposer.addOp(new Invoke(8, "ClrClassRepository", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
+            decomposer.addOp(new PutField(9, new FieldInfo(null, "repo", ClrType.FromClr<BlockDecomposerTest.TestPutField>(), false, false, false)));
+            decomposer.addOp(new Return(10, ClrType.Void));
+
+
+            decomposer.decomposeIntoBlocks();
+            IList<Operation> ops = decomposer.getOperations();
+            //Console.WriteLine(ops.ToString());
         }
     }
 }

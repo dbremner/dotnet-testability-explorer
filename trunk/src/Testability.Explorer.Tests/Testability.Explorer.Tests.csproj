@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\c5\C5.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil, Version=0.6.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\mono.cecil\Mono.Cecil.dll</HintPath>
@@ -92,6 +88,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\thirdparty\c5\C5\C5.csproj">
+      <Project>{D70489CD-ABDA-48FF-BD1E-BE3F7495BE71}</Project>
+      <Name>C5</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Testability.Explorer\Testability.Explorer.csproj">
       <Project>{164C80E0-AFD5-49DC-807F-62D8A9F5BE37}</Project>
       <Name>Testability.Explorer</Name>

@@ -4,7 +4,7 @@ namespace Thinklouder.Testability.Metrics.Method.Op.Turing
     {
         private readonly int lineNumber;
 
-        public Operation(int lineNumber)
+        protected Operation(int lineNumber)
         {
             this.lineNumber = lineNumber;
         }
