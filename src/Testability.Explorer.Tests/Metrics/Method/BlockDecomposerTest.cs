@@ -514,29 +514,7 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
         [Test]
         public void testClassInfoCtor()
         {
-            /*
-        decomposer.addOp(new Load(0, new LocalVariableInfo("this", JavaType.fromClass(BlockDecomposerTest.TestPutField.class))));
-        decomposer.addOp(new Load(1, new ParameterInfo("param_1", JavaType.fromClass(BlockDecomposerTest.class))));
-        decomposer.addOp(new PutField(2, new FieldInfo(null, "this$0", JavaType.fromClass(BlockDecomposerTest.TestPutField.class), false, false, false)));
-        decomposer.addOp(new Load(3, new LocalVariableInfo("this", JavaType.fromClass(BlockDecomposerTest.TestPutField.class))));
-        decomposer.addOp(new Invoke(4, "java.lang.Object", "<init>", "()V", new ArrayList<Type>(), false, JavaType.VOID));
-        decomposer.addOp(new Load(5, new LocalVariableInfo("this", JavaType.fromClass(BlockDecomposerTest.TestPutField.class))));
-        decomposer.addOp(new Load(6, new Constant("new", JavaType.fromClass(com.google.test.metric.JavaClassRepository.class))));
-        decomposer.addOp(new Duplicate(448, 0));
-        decomposer.addOp(new Invoke(8, "com.google.test.metric.JavaClassRepository", "<init>", "()V", new ArrayList<Type>(), false, JavaType.VOID));
-        decomposer.addOp(new PutField(9, new FieldInfo(null, "repo", JavaType.fromClass(BlockDecomposerTest.TestPutField.class), false, false, false)));
-        decomposer.addOp(new Return(449, JavaType.VOID));
-
-             */
-
-
             BlockDecomposer decomposer = new BlockDecomposer();
-
-
-            //block.addOp(new Load(1, new Constant(null, ClrType.FromDescriptor("Thinklouder.Testability.Metrics.ClrClassRepository"))));
-            ////block.addOp(new PutField(2, new FieldInfo(null, "repo", ClrType.FromDescriptor("Thinklouder.Testability.Metrics.ClrClassRepository"), false, false, false)));
-            //block.addOp(new Invoke(3, "System.Object", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
-            //block.addOp(new RetSub(4));
 
             decomposer.addOp(new Load(0, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
             decomposer.addOp(new Load(1, new ParameterInfo("param_1", ClrType.FromClr<BlockDecomposerTest>())));
@@ -553,7 +531,72 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
 
             decomposer.decomposeIntoBlocks();
             IList<Operation> ops = decomposer.getOperations();
-            //Console.WriteLine(ops.ToString());
+        }
+
+        public class EmptyCtor
+        {
+        }
+
+
+        [Test]
+        public void testEmptyCtor()
+        {
+
+            ClrClassRepository repo = new ClrClassRepository();
+            ClassInfo clazz = repo.GetClass(ClassInfo.GetFullName<EmptyCtor>());
+            ICollectionValue<MethodInfo> methods = clazz.GetMethods();
+            foreach (MethodInfo method in methods)
+            {
+                IList<Operation> ops = method.Operations;
+                IList<Operation> ops1 = ops;
+            }
+
+            //BlockDecomposer decomposer = new BlockDecomposer();
+
+            //decomposer.addOp(new Load(0, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
+            //decomposer.addOp(new Load(1, new ParameterInfo("param_1", ClrType.FromClr<BlockDecomposerTest>())));
+            //decomposer.addOp(new PutField(2, new FieldInfo(null, "this$0", ClrType.FromClr<BlockDecomposerTest.TestPutField>(), false, false, false)));
+            //decomposer.addOp(new Load(3, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
+            //decomposer.addOp(new Invoke(4, "System.Object", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
+            //decomposer.addOp(new Load(5, new LocalVariableInfo("this", ClrType.FromClr<BlockDecomposerTest.TestPutField>())));
+            //decomposer.addOp(new Load(6, new Constant("new", ClrType.FromClr<ClrClassRepository>())));
+            //decomposer.addOp(new Duplicate(7, 0));
+            //decomposer.addOp(new Invoke(8, "ClrClassRepository", ".ctor", "()System.Void", new ArrayList<Thinklouder.Testability.Metrics.Type>(), false, ClrType.Void));
+            //decomposer.addOp(new PutField(9, new FieldInfo(null, "repo", ClrType.FromClr<BlockDecomposerTest.TestPutField>(), false, false, false)));
+            //decomposer.addOp(new Return(10, ClrType.Void));
+
+
+            //decomposer.decomposeIntoBlocks();
+            //IList<Operation> ops = decomposer.getOperations();
+        }
+
+
+
+        [Test]
+        public void testParamInsn()
+        {
+            BlockDecomposer decomposer = new BlockDecomposer();
+
+            var paramInsn = new ClassInfo("ParamInsn", false, null, new ArrayList<ClassInfo>());
+            var methodThis = new ParameterInfo("this", ClrType.FromDescriptor("ParamInsn"));
+            var param2 = new ParameterInfo("param_2", ClrType.FromClr<object>());
+            var obj2 = new FieldInfo(paramInsn, "obj2", ClrType.FromClr<object>(), false, false, false);
+            decomposer.addOp(new Load(0, methodThis));
+            decomposer.addOp(new GetField(1, new FieldInfo(paramInsn, "objField", ClrType.FromDescriptor("ParamInsn1"), false, false, false)));
+            decomposer.addOp(new Load(2, new ParameterInfo("param_1", ClrType.FromClr<object>())));
+            decomposer.addOp(new PutField(3, new FieldInfo(paramInsn, "obj1", ClrType.FromClr<object>(), false, false, false)));
+            decomposer.addOp(new Load(4, methodThis));
+            decomposer.addOp(new Load(5, param2));
+            decomposer.addOp(new PutField(6, obj2));
+            decomposer.addOp(new Load(7, methodThis));
+            decomposer.addOp(new GetField(8, obj2));
+            decomposer.addOp(new Store(9, new LocalVariableInfo("local_0", ClrType.Object)));
+            decomposer.addOp(new Transform(10, "br.s", null, null, null));
+            decomposer.addOp(new Load(11, new LocalVariableInfo("local_1", ClrType.Object)));
+            decomposer.addOp(new Return(12, ClrType.Void));
+
+            decomposer.decomposeIntoBlocks();
+            IList<Operation> ops = decomposer.getOperations();
         }
     }
 }

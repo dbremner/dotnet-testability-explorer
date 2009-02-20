@@ -56,12 +56,12 @@ namespace Thinklouder.Testability.Metrics
 
         public static bool IsDoubleSlot(Type type)
         {
-            //return false;
-            return type == Double || type == Int64;  // TODO, if UInt64 double slot? by sunlw
+            return false;
+            //return type == Double || type == Int64;  // TODO, if UInt64 double slot? by sunlw
         }
 
         // TODO, do we meed more info for the Type model
-        public static Type FromClr(string clazz)
+        private static Type FromClr(string clazz)
         {
             int dotIndex = clazz.LastIndexOf(".");
             string name;
@@ -77,7 +77,7 @@ namespace Thinklouder.Testability.Metrics
                 ns = clazz.Substring(0, dotIndex);
             }
 
-            return new Type(0, clazz, true);
+            return new Type(0, clazz, false);
         }
 
         public static Type FromClr(System.Type type)

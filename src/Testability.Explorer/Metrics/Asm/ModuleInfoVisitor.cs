@@ -28,23 +28,10 @@ namespace Thinklouder.Testability.Metrics.Asm
 
         public override void VisitTypeDefinitionCollection(Mono.Cecil.TypeDefinitionCollection types)
         {
-
-//            foreach ( Mono.Cecil.TypeDefinition type in types )
-//            {
-////#if DEBUG
-////                Debug.Print(type.FullName);
-////#endif
-//                //if (!type.Name.Equals("<Module>") && type.Name.StartsWith("ClassInfoTest"))
-//                //if (!type.Name.Equals("<Module>") && !type.Name.StartsWith("ClassInfoTest") && !type.Name.StartsWith("BlockTest") && !type.Name.StartsWith("CostTest") && !type.Name.StartsWith("MetricComputerClrDecorator") && !type.Name.StartsWith("MethodInfoTest") && !type.Name.StartsWith("MethodCostTest"))
-//                //if (!type.Name.Equals("<Module>") && (type.Name.StartsWith("StaticFieldSample") || (type.Name.StartsWith("LoadClass")|| (type.Name.StartsWith("PopClass")))))
-//                if(!type.Name.Equals("<Module>") && type.Name.Equals(this.className))
-//                    VisitTypeDefinition(type);
-//            }
             if(types.Contains(className))
             {
                 VisitTypeDefinition(types[className]);
             }
-
         }
 
         // deprecated... by sunlw

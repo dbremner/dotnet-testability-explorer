@@ -76,14 +76,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Metrics\Asm\ClassInfoVisitor.cs" />
+    <Compile Include="Metrics\Asm\Instructions\BranchRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\CallRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\ConvertRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\ExceptionHandlerBlockRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\GetFieldRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\LabelRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\LoadConstantRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\LoadRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\NewArrayRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\NewRunnable.cs" />
+    <Compile Include="Metrics\Asm\Instructions\RetSubRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\ReturnRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\SetFieldRunnable.cs" />
     <Compile Include="Metrics\Asm\Instructions\StoreRunnable.cs" />
