@@ -29,15 +29,20 @@ namespace Thinklouder.Testability.Tests.Metrics
         public class SingleMethodClass
         {
             public void MethodA()
-            {}
+            { }
 
             public IList<object> MethodB()
             {
                 return null;
             }
 
+            public int MethodD()
+            {
+                return 1;
+            }
+
             public void MethodC(IList<object> objects)
-            {}
+            { }
         }
 
         [Test]

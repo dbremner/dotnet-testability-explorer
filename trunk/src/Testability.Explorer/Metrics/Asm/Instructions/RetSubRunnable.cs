@@ -1,25 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Thinklouder.Testability.Metrics.Method;
 using Thinklouder.Testability.Metrics.Method.Op.Stack;
 
 namespace Thinklouder.Testability.Metrics.Asm.Instructions
 {
-    public class ReturnRunnable : IRunnable
+    public class RetSubRunnable : IRunnable
     {
         private readonly BlockDecomposer block;
         private readonly Instruction instruction;
-        private readonly Type type;
 
-        public ReturnRunnable(BlockDecomposer block, Instruction instruction, Type type)
+        public RetSubRunnable(BlockDecomposer block, Instruction instruction)
         {
             this.block = block;
             this.instruction = instruction;
-            this.type = type;
         }
 
         public void run()
         {
-            block.addOp(new Return(instruction.Offset, type));
+            var lineNumber = instruction.Offset;
+            block.label(new Label(lineNumber));
+            block.addOp(new RetSub(lineNumber));
         }
     }
 }

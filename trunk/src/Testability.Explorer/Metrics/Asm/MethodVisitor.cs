@@ -15,8 +15,8 @@ namespace Thinklouder.Testability.Metrics.Asm
 {
     public class MethodVisitor : ICodeVisitor
     {
-        private readonly LocalVariableInfo methodThis;
-        private readonly IDictionary<int, Variable> slots = new HashDictionary<int, Variable>();
+        private readonly ParameterInfo methodThis;
+        //private readonly IDictionary<int, Variable> slots = new HashDictionary<int, Variable>();
         private readonly IList<LocalVariableInfo> localVariables = new ArrayList<LocalVariableInfo>();
         private readonly IList<ParameterInfo> parameters = new ArrayList<ParameterInfo>();
         private readonly IList<int> cyclomaticComplexity = new ArrayList<int>();
@@ -32,31 +32,37 @@ namespace Thinklouder.Testability.Metrics.Asm
             ClassInfo = classInfo;
             Name = name;
             Descriptor = descriptor;
+            IsStatic = isStatic;
             IsFinal = isFinal;
             Visibility = visibility;
 
-            int slot = 0;
-            if ( !isStatic )
+            var slot = 0;
+            if (!IsStatic)
             {
-                Type thisType = ClrType.FromClr(classInfo.Name);
-                methodThis = new LocalVariableInfo("this", thisType);
-                slots.Add(slot++, methodThis);
-                localVariables.Add(methodThis);
+                var thisType = ClrType.FromDescriptor(classInfo.Name);
+                methodThis = new ParameterInfo("this", thisType);
+
+                //slots.Add(slot++, methodThis);
+                slot ++;
+                parameters.Add(methodThis);
             }
 
-            int rightBraceIndex = descriptor.IndexOf(')');
-            string parameterString = descriptor.Substring(1, rightBraceIndex - 1);
+            var rightBraceIndex = descriptor.IndexOf(')');
+            var parameterString = descriptor.Substring(1, rightBraceIndex - 1);
 
             if (parameterString.Length > 0)
             {
-                string[] parameters1 = parameterString.Split(',');
+                var parameters1 = parameterString.Split(',');
 
-                foreach (string parameter in parameters1)
+                foreach (var parameter in parameters1)
                 {
-                    Type parameterType = new Type(parameter);
-                    ParameterInfo parameterInfo = new ParameterInfo("param_" + slot, parameterType);
+                    var parameterType = new Type(parameter);
+
+                    //ParameterInfo parameterInfo = new ParameterInfo("param_" + slot, parameterType);
+                    var parameterInfo = new ParameterInfo("param_" + slot, parameterType);
                     parameters.Add(parameterInfo);
-                    slots.Add(slot++, parameterInfo);
+                    //slots.Add(slot++, parameterInfo);
+                    slot++;
                     if (ClrType.IsDoubleSlot(parameterType))
                     {
                         slot++;
@@ -69,24 +75,33 @@ namespace Thinklouder.Testability.Metrics.Asm
         public ClassInfo ClassInfo { get; private set; }
         public string Name { get; private set; }
         public string Descriptor { get; private set; }
+        public bool IsStatic { get; private set; }
         public bool IsFinal { get; private set; }
         public Visibility Visibility { get; private set; }
+        public MethodBody MethodBody { get; private set; }
 
         #region ICodeVisitor Members
 
         public void VisitMethodBody(MethodBody body)
         {
-            VisitVariableDefinitionCollection(body.Variables);
+            this.MethodBody = body;
+            //VisitVariableDefinitionCollection(body.Variables);
             //VisitInstructionCollection(body.Instructions);
+            //VisitExceptionHandlerCollection(body.ExceptionHandlers);
         }
 
         public void VisitInstructionCollection(InstructionCollection instructions)
         {
             foreach (Instruction instruction in instructions)
             {
-                //recorder.Add(new LabelRunnable(block, instruction.Offset));
+                //VisitLabel(instruction);
                 VisitInstruction(instruction);
             }
+        }
+
+        private void VisitLabel(Instruction instruction)
+        {
+            recorder.Add(new LabelRunnable(block, instruction.Offset));
         }
 
         public void VisitInstruction(Instruction instruction)
@@ -128,9 +143,16 @@ namespace Thinklouder.Testability.Metrics.Asm
             #endregion
 
             #region "Visit Branching Instructions - visitJumpInsn in asm
-            if (instruction.OpCode == OpCodes.Br_S)
+            if (instruction.OpCode.FlowControl == FlowControl.Cond_Branch && 
+                instruction.OpCode != OpCodes.Switch)
             {
-                
+                recorder.Add(new BranchRunnable(block, instruction));
+            }
+
+            if (instruction.OpCode == OpCodes.Br ||
+                instruction.OpCode == OpCodes.Br_S)
+            {
+                recorder.Add(new BranchRunnable(block, instruction));
             }
             #endregion
 
@@ -143,6 +165,10 @@ namespace Thinklouder.Testability.Metrics.Asm
 
             #region "visitTypeInsn"
             if(instruction.OpCode == OpCodes.Newobj)
+            {
+                recorder.Add(new NewRunnable(block, instruction));
+            }
+            else if(instruction.OpCode == OpCodes.Initobj)
             {
                 recorder.Add(new NewRunnable(block, instruction));
             }
@@ -248,10 +274,41 @@ namespace Thinklouder.Testability.Metrics.Asm
             }
             #endregion
 
-            #region "visitVarInsn Load local var (TODO)"
-            #endregion
-
             #region "visitVarInsn Ecma-335 3.63"
+            if (instruction.OpCode == OpCodes.Ldloc || 
+                instruction.OpCode == OpCodes.Ldloc_S ||
+                instruction.OpCode == OpCodes.Ldloca ||
+                instruction.OpCode == OpCodes.Ldloca_S)
+            {
+                var vr = instruction.Operand as VariableReference;
+                load(instruction, vr.Index);
+            }
+            else if(instruction.OpCode == OpCodes.Ldloc_0 || 
+                instruction.OpCode == OpCodes.Ldloc_1 ||
+                instruction.OpCode == OpCodes.Ldloc_2 ||
+                instruction.OpCode == OpCodes.Ldloc_3)
+            {
+                var varIndex = instruction.OpCode.Value - OpCodes.Ldloc_0.Value;
+                load(instruction, varIndex);
+            }
+
+            if (instruction.OpCode == OpCodes.Ldarg ||
+                instruction.OpCode == OpCodes.Ldarg_S ||
+                instruction.OpCode == OpCodes.Ldarga ||
+                instruction.OpCode == OpCodes.Ldarga_S)
+            {
+                var paramIndex = ((ParameterReference)instruction.Operand).Sequence;
+                loadArg(instruction, paramIndex);
+            }
+            else if (instruction.OpCode == OpCodes.Ldarg_0 ||
+                instruction.OpCode == OpCodes.Ldarg_1 ||
+                instruction.OpCode == OpCodes.Ldarg_2 ||
+                instruction.OpCode == OpCodes.Ldarg_3)
+            {
+                var paramIndex = instruction.OpCode.Value - OpCodes.Ldarg_0.Value;
+                loadArg(instruction, paramIndex);
+            }
+
             if (instruction.OpCode == OpCodes.Stloc ||
                 instruction.OpCode == OpCodes.Stloc_S)
             {
@@ -263,7 +320,7 @@ namespace Thinklouder.Testability.Metrics.Asm
                 instruction.OpCode == OpCodes.Stloc_2 ||
                 instruction.OpCode == OpCodes.Stloc_3)
             {
-                int varIndex = instruction.OpCode.Value - OpCodes.Stloc_0.Value;
+                var varIndex = instruction.OpCode.Value - OpCodes.Stloc_0.Value;
                 store(instruction, varIndex);
             }
             #endregion
@@ -271,7 +328,21 @@ namespace Thinklouder.Testability.Metrics.Asm
             #region "visitVarInsn ret"
             if (instruction.OpCode == OpCodes.Ret)
             {
-                recorder.Add(new ReturnRunnable(block, instruction));
+                // type of the return
+                Type type = null;
+
+                int rightBraceOffset = this.Descriptor.LastIndexOf(")");
+
+                string returnType = this.Descriptor.Substring(rightBraceOffset + 1);
+
+                recorder.Add(new ReturnRunnable(block, instruction, ClrType.FromDescriptor(returnType)));
+            }
+
+            if (instruction.OpCode == OpCodes.Leave || 
+                instruction.OpCode == OpCodes.Leave_S)
+            {
+                //recorder.Add(new RetSubRunnable(block, instruction));
+                recorder.Add(new BranchRunnable(block, instruction));
             }
             #endregion
         }
@@ -283,16 +354,40 @@ namespace Thinklouder.Testability.Metrics.Asm
 
         private void store(Instruction instruction, int varIndex)
         {
-            recorder.Add(new StoreRunnable(block, instruction, variable(varIndex)));
+            recorder.Add(new StoreRunnable(block, instruction, getVariable(varIndex)));
         }
 
-        private Variable variable(int varIndex)
+        private void load(Instruction instruction, int varIndex)
         {
-            return slots[varIndex];
+            recorder.Add(new LoadRunnable(block, instruction, getVariable(varIndex)));
+        }
+
+        private void loadArg(Instruction instruction, int varIndex)
+        {
+            recorder.Add(new LoadRunnable(block, instruction, getParameter(varIndex)));
+        }
+
+        private Variable getParameter(int ParamIndex)
+        {
+            return parameters[ParamIndex];
+            //return slots[varIndex];
+        }
+
+        private Variable getVariable(int varIndex)
+        {
+            //if(!IsStatic)
+            //{
+            //    return slots[varIndex + 1];   
+            //}
+            //else
+            //{
+            //    return slots[varIndex];
+            //}
+            return localVariables[varIndex];
         }
 
         // TODO, do we need to implement like in java... by sunlw
-        //private Variable variable(int varIndex, Type type)
+        //private Variable arg(int varIndex, Type type)
         //{
         //    Variable resultVariable;
         //    if (!slots.Find(varIndex, out resultVariable) || resultVariable == null)
@@ -308,10 +403,10 @@ namespace Thinklouder.Testability.Metrics.Asm
         //    {
         //        // Apparently the compiler reuses local variables and it is possible
         //        // that the types change. So if types change we have to drop
-        //        // the variable and try again.
+        //        // the arg and try again.
         //        //slots.put(varIndex, null);
         //        slots[varIndex] = null;
-        //        return variable(varIndex, type);
+        //        return arg(varIndex, type);
         //    }
         //    return resultVariable;
         //}
@@ -340,8 +435,11 @@ namespace Thinklouder.Testability.Metrics.Asm
 
         public void VisitVariableDefinition(VariableDefinition variable)
         {
-            LocalVariableInfo localVar = new LocalVariableInfo("local_" + variable.Index, ClrType.FromDescriptor(variable.VariableType.FullName));
-            slots[variable.Index] = localVar;
+            var localVar = new LocalVariableInfo("local_" + variable.Index, ClrType.FromDescriptor(variable.VariableType.FullName));
+            var localVarIndex = variable.Index;
+            //if (!IsStatic)
+            //    localVarIndex += 1;
+            //slots[localVarIndex] = localVar;
             localVariables.Add(localVar);
         }
 
@@ -357,7 +455,7 @@ namespace Thinklouder.Testability.Metrics.Asm
 
         public void TerminateMethodBody(MethodBody body)
         {
-            foreach (IRunnable runnable in recorder)
+            foreach (var runnable in recorder)
             {
                 runnable.run();
             }
@@ -365,9 +463,14 @@ namespace Thinklouder.Testability.Metrics.Asm
 
             // TODO, set startingLineNumber
             Console.WriteLine("******\r\nBefore add MethodInfo:" + Name + "{"+ClassInfo+"}");
-            MethodInfo methodInfo = new MethodInfo(ClassInfo, Name, -1,
+            var operations = block.getOperations();
+            var methodInfo = new MethodInfo(ClassInfo, Name, -1,
                 Descriptor, methodThis, parameters, localVariables, Visibility,
-                cyclomaticComplexity, block.getOperations(), IsFinal);
+                cyclomaticComplexity, operations, IsFinal);
+
+            Console.WriteLine("######\r\nOperation after transform:" + Name + "{" + ClassInfo + "}");
+            Console.WriteLine(operations.ToString("long", null));
+            
             ClassInfo.AddMethod(methodInfo);
         }
 

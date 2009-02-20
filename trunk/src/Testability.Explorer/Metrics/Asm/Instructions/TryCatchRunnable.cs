@@ -34,6 +34,7 @@ namespace Thinklouder.Testability.Metrics.Asm.Instructions
             {
                 cyclomaticComplexity.Add(handlerStart.Offset);
             }
+            block.label(new Label(tryStart.Offset));
             block.tryCatchBlock(new Label(tryStart.Offset), new Label(tryEnd.Offset), new Label(handlerStart.Offset), type);
         }
     }

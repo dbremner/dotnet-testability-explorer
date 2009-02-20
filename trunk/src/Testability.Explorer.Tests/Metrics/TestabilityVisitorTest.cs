@@ -47,7 +47,7 @@ namespace Thinklouder.Testability.Tests.Metrics
         [Test]
         public void TestIsInjectable()
         {
-            var var = new Variable("", ClrType.FromClr("X"), false, false);
+            var var = new Variable("", ClrType.FromDescriptor("X"), false, false);
             Assert.IsFalse(globalVariables.IsInjectable(var));
             globalVariables.SetInjectable(var);
             Assert.IsTrue(globalVariables.IsInjectable(var));

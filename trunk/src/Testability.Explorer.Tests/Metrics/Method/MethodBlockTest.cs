@@ -45,14 +45,14 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
                 operations,
                 //".ctor()System.Void",
                 "System.Object..ctor()System.Void",
-                "Thinklouder.Testability.Tests.Metrics.Method.MethodBlockTest/Simple::a{System.Object} <- newobj{System.Object}");
+                "Thinklouder.Testability.Tests.Metrics.Method.MethodBlockTest/Simple::a{System.Object} <- newobj{System.Object}"
+                );
         }
 
         public class TryCatchFinally
         {
-            public void method()
+            public int method()
             {
-
                 int b = 1;
                 try
                 {
@@ -61,12 +61,15 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
                 catch (SystemException e)
                 {
                     b = 3;
+                    Console.WriteLine(e.Message);
                 }
                 finally
                 {
                     b = 4;
                 }
                 b = 5;
+
+                return b;
             }
         }
 
@@ -74,25 +77,33 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
         public void testTryCatchBlock()
         {
 
-            MethodInfo method = getMethod<TryCatchFinally>("method()System.Void");
+            MethodInfo method = getMethod<TryCatchFinally>("method()System.Int32");
             string operations = method.Operations.ToString("long", null);
 
-            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 1{System.Int32}"));
-            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 2{System.Int32}"));
-            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 3{System.Int32}"));
-            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 4{System.Int32}"));
-            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 5{System.Int32}"));
-            Assert.IsTrue(operations.Contains("local_1{System.SystemException} <- ?{System.SystemException}"));
+            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 1{System.Int32}"), "local_0{System.Int32} <- 1{System.Int32}");
+            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 2{System.Int32}"), "local_0{System.Int32} <- 2{System.Int32}");
+            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 3{System.Int32}"), "local_0{System.Int32} <- 3{System.Int32}");
+            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 4{System.Int32}"), "local_0{System.Int32} <- 4{System.Int32}");
+            Assert.IsTrue(operations.Contains("local_0{System.Int32} <- 5{System.Int32}"), "local_0{System.Int32} <- 5{System.Int32}");
+            Assert.IsTrue(operations.Contains("local_1{System.SystemException} <- ?{System.SystemException}"),"local_1{System.SystemException} <- ?{System.SystemException}");
         }
 
         public class IIF
         {
             private object a;
 
-            public void method()
+            //public void method()
+            //{
+            //    int b = 1;
+            //    a = b > 0 ? null : new object();
+            //    b = 2;
+            //}
+
+            public void method1()
             {
                 int b = 1;
-                a = b > 0 ? null : new object();
+                int c = 2;
+                a = b < c ? null : new object();
                 b = 2;
             }
         }
@@ -109,7 +120,7 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
         public void testMethodWithIIF()
         {
             //Class<IIF> clazz = IIF.class;
-            MethodInfo method = getMethod<IIF>("method()System.Void");
+            MethodInfo method = getMethod<IIF>("method1()System.Void");
             assertOperations(method.Operations,
                              "local_0{System.Int32} <- 1{System.Int32}",
                              "System.Object..ctor()System.Void",
@@ -161,6 +172,11 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
                 return text.Length;
             }
 
+            public int length(int a)
+            {
+                return text.Length + a;
+            }
+
             public static int staticLength()
             {
                 return staticText.Length;
@@ -183,7 +199,6 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
 
         class Foreach
         {
-
             public void method()
             {
                 foreach (string names in new string[0])
@@ -205,6 +220,109 @@ namespace Thinklouder.Testability.Tests.Metrics.Method
             //var methodInfo1 = getMethod<SwitchSample>("SwitchWith6Cases");
             var methodInfo2 = getMethod<SwitchSample>("SwitchWith7Cases");
             //var methodInfo3 = getMethod<SwitchSample>("SmallSwitch");
+        }
+
+        public class VarInsn
+        {
+            public VarInsn()
+            {
+                var obj = new object();
+                var dt = new DateTime();
+            }
+        }
+        
+        [Test]
+        public void testVarInsn()
+        {
+            var method = getMethod<VarInsn>(".ctor()System.Void");
+            var stackOperations = method.Operations.ToString("long", null);
+        }
+
+        public class ParamInsn
+        {
+            private object obj1;
+            private object obj2;
+            private object obj3;
+            private object obj4;
+            private object obj5;
+            private object obj6;
+            private object obj;
+
+            private ParamInsn1 obj7;
+
+            public static object objStatic;
+
+            public ParamInsn(object obj)
+            {
+                this.obj = obj;
+            }
+
+            public ParamInsn(object obj1, object obj2, object obj3, object obj4, object obj5, object obj6)
+            {
+                this.obj1 = obj1;
+                this.obj2 = obj2;
+                this.obj3 = obj3;
+                this.obj4 = obj4;
+                this.obj5 = obj5;
+                this.obj6 = obj6;
+            }
+
+            public void setInstance(object obj1, object obj2, object obj3)
+            {
+                this.obj1 = obj1;
+                this.obj2 = obj2;
+                this.obj3 = obj3;
+            }
+
+            public object setInstanceReturn(object obj1, object obj2)
+            {
+                this.obj7.obj1 = obj1;
+                this.obj2 = obj2;
+                return this.obj2;
+            }
+
+            public static void setStatic(object obj1)
+            {
+                objStatic = obj1;
+            }
+
+            public static object setStaticReturnArg(object obj1)
+            {
+                objStatic = obj1;
+                return obj1;
+            }
+
+            public static object setStaticReturnField(object obj1)
+            {
+                objStatic = obj1;
+                return objStatic;
+            }
+
+            public object setInstanceFieldReturnField(object obj)
+            {
+                object localObject = obj;
+                this.obj1 = obj;
+                return this.obj1;
+            }
+
+            public object setInstanceFieldReturnLocal(object obj)
+            {
+                object localObject = obj;
+                this.obj1 = obj;
+                return localObject;
+            }
+        }
+
+        public class ParamInsn1
+        {
+            public object obj1;
+        }
+        
+        [Test]
+        public void testParamInsn()
+        {
+            var method = getMethod<ParamInsn>(".ctor(System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)System.Void");
+            var stackOperations = method.Operations.ToString("long", null);
         }
     }
 }

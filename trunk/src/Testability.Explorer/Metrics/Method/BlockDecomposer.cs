@@ -138,6 +138,7 @@ namespace Thinklouder.Testability.Metrics.Method
             if (lastLabel != null)
             {
                 frames.Add(lastLabel, lastFrame);
+                //frames[lastLabel] = lastFrame;
                 lastFrame.Label = lastLabel;
                 lastLabel = null;
             }

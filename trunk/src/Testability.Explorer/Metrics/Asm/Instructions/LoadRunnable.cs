@@ -4,22 +4,24 @@ using Thinklouder.Testability.Metrics.Method.Op.Stack;
 
 namespace Thinklouder.Testability.Metrics.Asm.Instructions
 {
-    public class ReturnRunnable : IRunnable
+    public class LoadRunnable : IRunnable
     {
         private readonly BlockDecomposer block;
         private readonly Instruction instruction;
-        private readonly Type type;
+        private readonly Variable variable;
 
-        public ReturnRunnable(BlockDecomposer block, Instruction instruction, Type type)
+        public LoadRunnable(BlockDecomposer block, Instruction instruction, Variable variable)
         {
             this.block = block;
             this.instruction = instruction;
-            this.type = type;
+            this.variable = variable;
         }
 
         public void run()
         {
-            block.addOp(new Return(instruction.Offset, type));
+            var lineNumber = instruction.Offset;
+            block.label(new Label(lineNumber));
+            block.addOp(new Load(lineNumber, variable));
         }
     }
 }
