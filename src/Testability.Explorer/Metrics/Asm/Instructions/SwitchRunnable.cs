@@ -27,7 +27,7 @@ namespace Thinklouder.Testability.Metrics.Asm.Instructions
                 cyclomaticComplexity.Add(ins.Offset);
             }
             var lineNumber = defaultCase.Offset;
-            block.label(new Label(lineNumber));
+            //block.label(new Label(lineNumber));
             block.addOp(new Pop(lineNumber, 1));
             block.tableSwitch(new Label(lineNumber), asLabels(cases));
         }

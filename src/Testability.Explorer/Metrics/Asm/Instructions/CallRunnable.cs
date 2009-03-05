@@ -44,4 +44,22 @@ namespace Thinklouder.Testability.Metrics.Asm.Instructions
                 parameters, instruction.OpCode == OpCodes.Call, returnType));
         }
     }
+
+    public class NopRunnable : IRunnable
+    {
+        private readonly Instruction instruction;
+        private readonly BlockDecomposer block;
+
+        public NopRunnable(Instruction instruction, BlockDecomposer block)
+        {
+            this.instruction = instruction;
+            this.block = block;
+        }
+
+        public void run()
+        {
+            block.label(new Label(instruction.Offset));
+            block.addOp(new Transform(instruction.Offset, "nop", null, null, null));
+        }
+    }
 }

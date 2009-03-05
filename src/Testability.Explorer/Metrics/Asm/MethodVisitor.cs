@@ -107,6 +107,10 @@ namespace Thinklouder.Testability.Metrics.Asm
         public void VisitInstruction(Instruction instruction)
         {
             //Console.WriteLine(instruction.OpCode.Name + " " + instruction.Operand);
+            if (instruction.OpCode == OpCodes.Nop)
+            {
+                recorder.Add(new NopRunnable(instruction, block));
+            }
 
             #region "CallRunnable"
             if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Callvirt)

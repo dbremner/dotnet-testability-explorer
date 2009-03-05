@@ -152,8 +152,9 @@ namespace Thinklouder.Testability.Metrics.Method
             }
             else
             {
-                throw new InvalidOperationException("Multiple lables per line are not allowed.");
+                throw new InvalidOperationException("Multiple labels per line are not allowed.");
             }
+            //lastLabel = label;
         }
 
         public void unconditionalGoto(Label label)
