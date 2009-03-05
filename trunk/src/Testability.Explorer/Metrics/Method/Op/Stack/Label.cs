@@ -55,5 +55,10 @@ namespace Thinklouder.Testability.Metrics.Method.Op.Stack
         //{
         //    return !( a == b );
         //}
+
+        public override string ToString()
+        {
+            return "label: " + label;
+        }
     }
 }
