@@ -1,0 +1,11 @@
+# Introduction #
+
+Inspired by Google Testability Explorer(by [Miško Hevery](http://misko.hevery.com/)), Joe and I initialized this project to implement the same idea on .NET platform. Most of the analysis work to the .NET assembly based on Mono.Cecil(by [JB Evain](http://evain.net/)). And the cost model is based on the original design in GTE.
+
+Thanks all the people for the contribution to GTE and Mono.Cecil.
+
+I hope to release the first runnable version during Christmas holiday in 2008 or in early of Jan 2009. I am busy working on that. Joe will help me to review the migration work and have discussion with me  on the release scope.
+
+You can visit my personal blog http://thinklouder.cn for the lastest update.
+
+Thanks for your reading!
